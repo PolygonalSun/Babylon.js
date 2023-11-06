@@ -128,7 +128,7 @@ export class FollowCameraKeyboardMoveInput implements ICameraInput<FollowCamera>
     @serialize()
     public radiusSensibility: number = 1;
 
-    private _keys = new Array<number>();
+    protected _keys = new Array<number>();
     private _ctrlPressed: boolean;
     private _altPressed: boolean;
     private _shiftPressed: boolean;

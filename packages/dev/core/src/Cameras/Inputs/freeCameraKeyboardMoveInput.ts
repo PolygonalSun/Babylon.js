@@ -86,7 +86,7 @@ export class FreeCameraKeyboardMoveInput implements ICameraInput<FreeCamera> {
     @serialize()
     public keysRotateDown: number[] = [];
 
-    private _keys = new Array<number>();
+    protected _keys = new Array<number>();
     private _onCanvasBlurObserver: Nullable<Observer<Engine>>;
     private _onKeyboardObserver: Nullable<Observer<KeyboardInfo>>;
     private _engine: Engine;

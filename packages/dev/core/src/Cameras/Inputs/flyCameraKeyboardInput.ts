@@ -57,7 +57,7 @@ export class FlyCameraKeyboardInput implements ICameraInput<FlyCamera> {
     @serialize()
     public keysLeft = [65];
 
-    private _keys = new Array<number>();
+    protected _keys = new Array<number>();
     private _onCanvasBlurObserver: Nullable<Observer<Engine>>;
     private _onKeyboardObserver: Nullable<Observer<KeyboardInfo>>;
     private _engine: Engine;

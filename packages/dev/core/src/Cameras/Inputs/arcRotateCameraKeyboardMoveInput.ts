@@ -78,7 +78,7 @@ export class ArcRotateCameraKeyboardMoveInput implements ICameraInput<ArcRotateC
     @serialize()
     public angularSpeed = 0.01;
 
-    private _keys = new Array<number>();
+    protected _keys = new Array<number>();
     private _ctrlPressed: boolean;
     private _altPressed: boolean;
     private _onCanvasBlurObserver: Nullable<Observer<Engine>>;
