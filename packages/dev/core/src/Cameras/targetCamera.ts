@@ -25,6 +25,8 @@ export class TargetCamera extends Camera {
     private _tmpUpVector = Vector3.Zero();
     private _tmpTargetVector = Vector3.Zero();
 
+    public upRotation: number = 0;
+
     /**
      * Define the current direction the camera is moving to
      */

@@ -2,7 +2,7 @@ import { serialize, serializeAsVector3, serializeAsMeshReference, serializeAsVec
 import { Observable } from "../Misc/observable";
 import type { Nullable } from "../types";
 import type { Scene } from "../scene";
-import { Matrix, Vector3, Vector2, TmpVectors } from "../Maths/math.vector";
+import { Matrix, Vector3, Vector2, TmpVectors, Quaternion } from "../Maths/math.vector";
 import { Node } from "../node";
 import type { AbstractMesh } from "../Meshes/abstractMesh";
 import { Mesh } from "../Meshes/mesh";
@@ -1137,8 +1137,18 @@ export class ArcRotateCamera extends TargetCamera {
             this.radius = 0.0001; // Just to avoid division by zero
         }
 
+        const q = Quaternion.FromEulerAngles(this.upRotation, -this.alpha, -this.beta);
+        const b = new Matrix();
+        q.toRotationMatrix(b);
+        this._computationVector.set(0, 1, 0);
+        Vector3.TransformCoordinatesToRef(this._computationVector, b, this._computationVector);
+        this._computationVector.scaleInPlace(this.radius);
+
+
+
         const target = this._getTargetPosition();
-        this._computationVector.copyFromFloats(this.radius * cosa * sinb, this.radius * cosb, this.radius * sina * sinb);
+        //this._computationVector.copyFromFloats(this.radius * cosa * sinb, this.radius * cosb, this.radius * sina * sinb);
+        const old = new Vector3(this.radius * cosa * sinb, this.radius * cosb, this.radius * sina * sinb);
 
         // Rotate according to up vector
         if (this._upVector.x !== 0 || this._upVector.y !== 1.0 || this._upVector.z !== 0) {
@@ -1163,7 +1173,12 @@ export class ArcRotateCamera extends TargetCamera {
                 up = up.negate();
             }
 
-            this._computeViewMatrix(this._position, target, up);
+            const quat = Quaternion.RotationAxis(this._position.subtract(target), this.upRotation);
+            const c = new Matrix();
+            quat.toRotationMatrix(c);
+            const upC = up.clone();
+            Vector3.TransformNormalToRef(upC, c, upC);
+            this._computeViewMatrix(this._position, target, upC);
 
             this._viewMatrix.addAtIndex(12, this.targetScreenOffset.x);
             this._viewMatrix.addAtIndex(13, this.targetScreenOffset.y);
